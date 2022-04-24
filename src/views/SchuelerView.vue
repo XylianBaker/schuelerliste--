@@ -1,6 +1,9 @@
 <template>
-  // A loop that iterates over the schuelerListe array and creates a new
-  Schueler component for each // element in the array.
+  <!-- Calling the addStudent method and passing the  object to it. -->
+  <StudentInput @addStudent="addStudent($event)" />
+
+  <!-- A loop that iterates over the schuelerListe array and creates a new
+  Schueler component for each // element in the array. -->
   <template v-for="schueler in schuelerListe" :key="schueler.id">
     <Schueler
       :id="schueler.id"
@@ -15,19 +18,38 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import Schueler from "@/components/Schueler.vue"; // @ is an alias to /src
+import StudentInput from "@/components/StudentInput.vue"; // @ is an alias to /src
 
 export default defineComponent({
   name: "SchuelerView",
   components: {
     Schueler,
+    StudentInput,
   },
   methods: {
     // A method that is called when the delete button is clicked. It takes the index of the student
     // that was clicked and removes it from the array.
     deleteT(schueler: number) {
-      this.schuelerListe.splice(schueler, 1);
+      // Finding the index of the student that was clicked
+      let del = this.schuelerListe.findIndex(
+        (student) => student.id == schueler
+      );
+
+      this.schuelerListe.splice(del, 1);
       console.log("got deleted ❤️‍🔥!" + schueler);
       console.log(this.schuelerListe);
+    },
+    // A method that is called when the addStudent button is clicked. It takes the object that was
+    // passed to it and adds it to the array.
+    addStudent(schueler: any) {
+      let student: any = {
+        name: schueler.firstname + " " + schueler.lastname,
+        age: schueler.age,
+        telNumber: schueler.telNumber,
+        id: this.schuelerListe.length,
+      };
+      this.schuelerListe.push(student);
+      console.log("something happened");
     },
   },
   data: () => ({
